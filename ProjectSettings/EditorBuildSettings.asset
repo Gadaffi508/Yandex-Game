@@ -12,5 +12,5 @@ EditorBuildSettings:
     path: Assets/VFX/EffectExamples/Scenes/Menu.unity
     guid: 01dc19837bbb44ce6a53695fcbb60de3
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 963ff940934294a4d98008cd64333e96, type: 3}
   m_UseUCBPForAssetBundles: 0

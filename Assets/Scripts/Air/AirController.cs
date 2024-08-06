@@ -11,6 +11,8 @@ namespace Ducktastic
         public float maxThrust = 200f;
 
         public float rotationSpeed = 2f;
+        
+        private PlayerInput ınputManager;
 
         private float throttle, pitch;
 
@@ -19,7 +21,7 @@ namespace Ducktastic
         private Vector3 targetRotation;
 
         private Quaternion targetQuat;
-
+        
         private float mouseX, mouseY;
 
         void Awake()
@@ -27,6 +29,11 @@ namespace Ducktastic
             rb = GetComponent<Rigidbody>();
 
             Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        void Start()
+        {
+            ınputManager = GetComponent<PlayerInput>();
         }
 
         void Update()
@@ -45,21 +52,16 @@ namespace Ducktastic
 
         void HandleInputs()
         {
-            pitch = Input.GetAxis("Vertical");
-            
-            mouseX = Input.GetAxis("Mouse X");
-            mouseY = Input.GetAxis("Mouse Y");
-
-            if (pitch > 0.01f) throttle += throttleIncrement;
-            else if (pitch < 0.01f) throttle -= throttleIncrement;
+            if (ınputManager.MoveEvent.y > 0.01f) throttle += throttleIncrement;
+            else if (ınputManager.MoveEvent.y < 0.01f) throttle -= throttleIncrement;
 
             throttle = Mathf.Clamp(throttle, 0f, 100f);
         }
 
         void UpdateTargetRotation()
         {
-            targetRotation.y += mouseX * rotationSpeed;
-            targetRotation.x -= mouseY * rotationSpeed;
+            targetRotation.y += ınputManager.MouseEvent.x * rotationSpeed;
+            targetRotation.x -= ınputManager.MouseEvent.y * rotationSpeed;
 
             targetRotation.x = Mathf.Clamp(targetRotation.x, -90f, 90f);
         }
