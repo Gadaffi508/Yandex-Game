@@ -11,18 +11,20 @@ namespace Ducktastic
         public float maxThrust = 200f;
 
         public float rotationSpeed = 2f;
-        
-        private PlayerInput ınputManager;
 
         private float throttle, pitch;
+        
+        private float mouseX, mouseY;
 
+        private bool sprint = false;
+        
+        private PlayerInput ınputManager;
+        
         private Rigidbody rb = null;
 
         private Vector3 targetRotation;
 
         private Quaternion targetQuat;
-        
-        private float mouseX, mouseY;
 
         void Awake()
         {
@@ -52,23 +54,27 @@ namespace Ducktastic
 
         void HandleInputs()
         {
-            if (ınputManager.MoveEvent.y > 0.01f) throttle += throttleIncrement;
-            else if (ınputManager.MoveEvent.y < 0.01f) throttle -= throttleIncrement;
+            if (ınputManager.CurrentMovement.y > 0.01f) throttle += throttleIncrement;
+            else if (ınputManager.CurrentMovement.y < 0.01f) throttle -= throttleIncrement;
+
+            sprint = ınputManager.SprintClick;
 
             throttle = Mathf.Clamp(throttle, 0f, 100f);
         }
 
         void UpdateTargetRotation()
         {
-            targetRotation.y += ınputManager.MouseEvent.x * rotationSpeed;
-            targetRotation.x -= ınputManager.MouseEvent.y * rotationSpeed;
+            targetRotation.y += ınputManager.MouseMovement.x * rotationSpeed * Time.deltaTime;
+            targetRotation.x -= ınputManager.MouseMovement.y * rotationSpeed * Time.deltaTime;
 
             targetRotation.x = Mathf.Clamp(targetRotation.x, -90f, 90f);
         }
 
         void AirForce()
         {
-            rb.AddForce(transform.forward * maxThrust * throttle);
+            int maxThrottle = sprint ? 1000 : 200;
+            
+            rb.AddForce(transform.forward * maxThrottle * throttle);
 
             rb.AddForce(Vector3.up * rb.linearVelocity.magnitude * 150f);
         }

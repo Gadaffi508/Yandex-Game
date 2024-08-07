@@ -1,42 +1,50 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Ducktastic
 {
-    public class PlayerInput : MonoBehaviour, InputManager.IKeyboardActions
+    public class PlayerInput : MonoBehaviour
     {
-        public Vector2 MoveEvent;
+        internal Vector2 CurrentMovement;
         
-        public Vector2 MouseEvent;
-        
-        private InputManager _manager;
+        internal Vector2 MouseMovement;
 
-        void Start()
+        internal bool FireClick;
+
+        internal bool SprintClick;
+        
+        private InputManager _ınputManager;
+
+        public InputManager InputManager
         {
-            if (_manager == null)
+            get
             {
-                _manager = new InputManager();
-                
-                _manager.Keyboard.SetCallbacks(this);
+                if (_ınputManager == null)
+                {
+                    _ınputManager = new InputManager();
+                }
 
-                SetGamePlay();
+                return _ınputManager;
             }
         }
 
-        void SetGamePlay()
+        private void Awake()
         {
-            _manager.Keyboard.Enable();
-        }
-
-        public void OnMove(InputAction.CallbackContext context)
-        {
+            InputManager.Keyboard.Move.performed += ctx => CurrentMovement = ctx.ReadValue<Vector2>();
             
-        }
-
-        public void OnMouse(InputAction.CallbackContext context)
-        {
+            InputManager.Keyboard.Mouse.performed += ctx => MouseMovement = ctx.ReadValue<Vector2>();
             
+            InputManager.Keyboard.Fire.performed += ctx => FireClick = ctx.ReadValueAsButton();
+            
+            InputManager.Keyboard.Sprint.performed += ctx => SprintClick = ctx.ReadValueAsButton();
         }
+        
+        private void OnEnable() =>
+            
+            InputManager.Keyboard.Enable();
+
+        private void OnDisable() =>
+            
+            InputManager.Keyboard.Disable();
     }
 }

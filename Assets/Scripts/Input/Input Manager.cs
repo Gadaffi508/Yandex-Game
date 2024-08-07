@@ -45,6 +45,24 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""df39993f-cb14-4dd7-99bc-178a59e52b87"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""b937b39a-d500-4d67-abc3-693f76889204"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -104,37 +122,37 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""84a5f952-3f08-41cc-afe1-fea741c41765"",
-                    ""path"": ""1DAxis"",
+                    ""name"": """",
+                    ""id"": ""6ebf0742-e70a-476f-b7f5-a99c4bf962cc"",
+                    ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Mouse"",
-                    ""isComposite"": true,
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""ee69dfca-8967-4a74-ac22-011b2a2c1643"",
-                    ""path"": ""<Mouse>/position/x"",
+                    ""name"": """",
+                    ""id"": ""6a1bcd41-edfe-459e-b2a8-c0470dcfb678"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Mouse"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""positive"",
-                    ""id"": ""37e76182-7c51-4520-8cef-e9ce0eed97db"",
-                    ""path"": ""<Mouse>/position/y"",
+                    ""name"": """",
+                    ""id"": ""67617833-dcfb-48ab-a679-50134fc6c894"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Mouse"",
+                    ""action"": ""Sprint"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -145,6 +163,8 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
         m_Keyboard_Move = m_Keyboard.FindAction("Move", throwIfNotFound: true);
         m_Keyboard_Mouse = m_Keyboard.FindAction("Mouse", throwIfNotFound: true);
+        m_Keyboard_Fire = m_Keyboard.FindAction("Fire", throwIfNotFound: true);
+        m_Keyboard_Sprint = m_Keyboard.FindAction("Sprint", throwIfNotFound: true);
     }
 
     ~@InputManager()
@@ -213,12 +233,16 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     private List<IKeyboardActions> m_KeyboardActionsCallbackInterfaces = new List<IKeyboardActions>();
     private readonly InputAction m_Keyboard_Move;
     private readonly InputAction m_Keyboard_Mouse;
+    private readonly InputAction m_Keyboard_Fire;
+    private readonly InputAction m_Keyboard_Sprint;
     public struct KeyboardActions
     {
         private @InputManager m_Wrapper;
         public KeyboardActions(@InputManager wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Keyboard_Move;
         public InputAction @Mouse => m_Wrapper.m_Keyboard_Mouse;
+        public InputAction @Fire => m_Wrapper.m_Keyboard_Fire;
+        public InputAction @Sprint => m_Wrapper.m_Keyboard_Sprint;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -234,6 +258,12 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @Mouse.started += instance.OnMouse;
             @Mouse.performed += instance.OnMouse;
             @Mouse.canceled += instance.OnMouse;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -244,6 +274,12 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @Mouse.started -= instance.OnMouse;
             @Mouse.performed -= instance.OnMouse;
             @Mouse.canceled -= instance.OnMouse;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -265,5 +301,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnMouse(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
     }
 }

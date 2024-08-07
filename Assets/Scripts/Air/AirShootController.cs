@@ -12,12 +12,18 @@ namespace Ducktastic
 
         public float fireRepeatTime = 0.5f;
 
+        private PlayerInput _ınputManager;
+
         private float duration = 0f;
+
+        private void Start() =>
+
+            _ınputManager = GetComponent<PlayerInput>();
 
         private void Update()
         {
             duration += Time.deltaTime;
-            if (Input.GetMouseButton(0) && duration > fireRepeatTime)
+            if (_ınputManager.FireClick && duration > fireRepeatTime)
             {
                 Fire();
                 duration = 0;
