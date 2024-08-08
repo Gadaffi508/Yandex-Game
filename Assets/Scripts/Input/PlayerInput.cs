@@ -5,6 +5,10 @@ namespace Ducktastic
 {
     public class PlayerInput : MonoBehaviour
     {
+        public event Action<bool> OnSprint;
+        
+        public event Action<bool> OnFire;
+        
         internal Vector2 CurrentMovement;
         
         internal Vector2 MouseMovement;
@@ -34,9 +38,17 @@ namespace Ducktastic
             
             InputManager.Keyboard.Mouse.performed += ctx => MouseMovement = ctx.ReadValue<Vector2>();
             
-            InputManager.Keyboard.Fire.performed += ctx => FireClick = ctx.ReadValueAsButton();
+            InputManager.Keyboard.Fire.performed += ctx =>
+            {
+                FireClick = ctx.ReadValueAsButton();
+                OnFire?.Invoke(FireClick);
+            };
             
-            InputManager.Keyboard.Sprint.performed += ctx => SprintClick = ctx.ReadValueAsButton();
+            InputManager.Keyboard.Sprint.performed += ctx =>
+            {
+                SprintClick = ctx.ReadValueAsButton();
+                OnSprint?.Invoke(SprintClick);
+            };
         }
         
         private void OnEnable() =>

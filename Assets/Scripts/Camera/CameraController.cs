@@ -7,7 +7,7 @@ namespace Ducktastic
     {
         public Transform povs = null;
 
-        public float speed = 5f;
+        public float speed = 500f;
         private Vector3 target => povs.position;
 
         void FixedUpdate()

@@ -13,13 +13,13 @@ namespace Ducktastic
         public float rotationSpeed = 2f;
 
         private float throttle, pitch;
-        
+
         private float mouseX, mouseY;
 
         private bool sprint = false;
-        
+
         private PlayerInput ınputManager;
-        
+
         private Rigidbody rb = null;
 
         private Vector3 targetRotation;
@@ -36,6 +36,13 @@ namespace Ducktastic
         void Start()
         {
             ınputManager = GetComponent<PlayerInput>();
+            
+            ınputManager.OnSprint += SprintEvent;
+        }
+
+        void OnDisable()
+        {
+            ınputManager.OnSprint -= SprintEvent;
         }
 
         void Update()
@@ -47,7 +54,7 @@ namespace Ducktastic
         void FixedUpdate()
         {
             AirForce();
-            
+
             targetQuat = Quaternion.Euler(targetRotation);
             rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetQuat, Time.fixedDeltaTime * rotationSpeed));
         }
@@ -72,11 +79,17 @@ namespace Ducktastic
 
         void AirForce()
         {
-            int maxThrottle = sprint ? 1000 : 200;
-            
-            rb.AddForce(transform.forward * maxThrottle * throttle);
+            rb.AddForce(transform.forward * maxThrust * throttle);
 
             rb.AddForce(Vector3.up * rb.linearVelocity.magnitude * 150f);
+        }
+
+        void SprintEvent(bool sprint)
+        {
+            if (sprint)
+                maxThrust = 1000;
+            else
+                maxThrust = 200;
         }
     }
 }
