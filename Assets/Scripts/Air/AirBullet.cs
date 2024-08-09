@@ -20,17 +20,19 @@ namespace Ducktastic
 
         private void FixedUpdate()
         {
-            if(touched == true) return;
             rb.AddForce(transform.forward * speed);
+        }
+
+        void OnEnable()
+        {
+            rb.linearVelocity = Vector3.zero;
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Ground"))
             {
-                touched = true;
                 Instantiate(fireEffect,transform.position,Quaternion.identity);
-                Destroy(rb);
             }
         }
     }
