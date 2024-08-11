@@ -22,8 +22,6 @@ namespace Ducktastic
         private PlayerInput _ınputManager;
         
         private Queue<GameObject> objectPool;
-        
-        private Coroutine fireCoroutine;
 
         void Start()
         {
@@ -53,21 +51,11 @@ namespace Ducktastic
 
         void FireEvent(bool fireClick)
         {
-            if (fireClick)
-            {
-                if (fireCoroutine == null)
-                {
-                    fireCoroutine = StartCoroutine(FireRoutine());
-                }
-            }
+            if (fireClick is true)
+                StartCoroutine(FireRoutine());
+            
             else
-            {
-                if (fireCoroutine != null)
-                {
-                    StopCoroutine(fireCoroutine);
-                    fireCoroutine = null;
-                }
-            }
+                StopAllCoroutines();
         }
         IEnumerator FireRoutine()
         {
@@ -75,10 +63,11 @@ namespace Ducktastic
             {
                 FireBullet();
                 yield return new WaitForSeconds(fireRepeatTime);
+                StartCoroutine(FireRoutine());
             }
         }
         
-        private void FireBullet()
+        void FireBullet()
         {
             if (objectPool.Count > 0)
             {

@@ -44,6 +44,12 @@ namespace Ducktastic
                 OnFire?.Invoke(FireClick);
             };
             
+            InputManager.Keyboard.Fire.canceled += ctx =>
+            {
+                FireClick = ctx.ReadValueAsButton();
+                OnFire?.Invoke(!FireClick);
+            };
+            
             InputManager.Keyboard.Sprint.performed += ctx =>
             {
                 SprintClick = ctx.ReadValueAsButton();

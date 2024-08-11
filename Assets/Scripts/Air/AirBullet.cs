@@ -8,6 +8,8 @@ namespace Ducktastic
         public float speed = 100;
 
         public GameObject fireEffect;
+
+        public int damage = 20;
         
         private Rigidbody rb;
 
@@ -33,6 +35,11 @@ namespace Ducktastic
             if (other.gameObject.CompareTag("Ground"))
             {
                 Instantiate(fireEffect,transform.position,Quaternion.identity);
+            }
+
+            if (other.gameObject.TryGetComponent(out EnemyHealth health))
+            {
+                health.TakeDamage(damage);
             }
         }
     }
