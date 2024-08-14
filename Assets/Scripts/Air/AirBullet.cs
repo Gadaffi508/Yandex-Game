@@ -37,7 +37,7 @@ namespace Ducktastic
                 Instantiate(fireEffect,transform.position,Quaternion.identity);
             }
 
-            if (other.gameObject.TryGetComponent(out EnemyHealth health))
+            if (other.gameObject.TryGetComponent(out IHealth health))
             {
                 health.TakeDamage(damage);
             }

@@ -51,20 +51,7 @@ namespace Ducktastic
 
         void FireEvent(bool fireClick)
         {
-            if (fireClick is true)
-                StartCoroutine(FireRoutine());
-            
-            else
-                StopAllCoroutines();
-        }
-        IEnumerator FireRoutine()
-        {
-            while (true)
-            {
-                FireBullet();
-                yield return new WaitForSeconds(fireRepeatTime);
-                StartCoroutine(FireRoutine());
-            }
+            FireBullet();
         }
         
         void FireBullet()

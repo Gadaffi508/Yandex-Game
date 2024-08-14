@@ -1,24 +1,17 @@
-using System;
 using UnityEngine;
 
 namespace Ducktastic
 {
-    [RequireComponent(typeof(MeshDestroy))]
-    public class EnemyHealth : MonoBehaviour, IHealth
+    public class JettEnemyHealth : MonoBehaviour, IHealth
     {
-        public int health = 100;
-
-        private MeshDestroy _destroy;
-
-        private void Start() =>
-            _destroy = GetComponent<MeshDestroy>();
-
         public int Health
         {
             get => health;
             set => health = value;
         }
 
+        public int health = 100;
+        
         public void TakeDamage(int damage)
         {
             Health -= damage;
@@ -28,7 +21,7 @@ namespace Ducktastic
 
         public void Explode()
         {
-            _destroy.DestroyMesh();
+            Destroy(gameObject);
         }
     }
 }
