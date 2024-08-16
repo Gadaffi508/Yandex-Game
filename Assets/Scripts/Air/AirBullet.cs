@@ -10,7 +10,9 @@ namespace Ducktastic
         public GameObject fireEffect;
 
         public int damage = 20;
-        
+
+        public String targetName;
+
         private Rigidbody rb;
 
         private bool touched = false;
@@ -32,10 +34,12 @@ namespace Ducktastic
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Ground"))
+            if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Enemy"))
             {
-                Instantiate(fireEffect,transform.position,Quaternion.identity);
+                Instantiate(fireEffect, transform.position, Quaternion.identity);
             }
+
+            if (!other.gameObject.CompareTag(targetName)) return;
 
             if (other.gameObject.TryGetComponent(out IHealth health))
             {

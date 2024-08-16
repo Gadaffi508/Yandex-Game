@@ -6,29 +6,33 @@ using Random = UnityEngine.Random;
 
 namespace Ducktastic
 {
-    public class AirShootController : MonoBehaviour
+    public class AirShootController : MonoBehaviour, IAttack
     {
-        [Header("References")]
-        public Transform[] firePos = null;
-
+        public AttackData Data
+        {
+            get { return data; }
+            set
+            {
+                Data.firePos[0] = firePos[0];
+                Data.firePos[1] = firePos[1];
+                Data.poolPos = poolPos;
+            }
+        }
+        
+        public Transform[] firePos;
+        
         public Transform poolPos;
-        
-        public GameObject bullet = null;
 
-        public float fireRepeatTime = 0.5f;
-        
-        public int poolSize = 20;
+        public AttackData data;
 
         private PlayerInput _ınputManager;
-        
-        private Queue<GameObject> objectPool;
 
         void Start()
         {
             _ınputManager = GetComponent<PlayerInput>();
-            
+
             InitializeObjectPool();
-        
+
             _ınputManager.OnFire += FireEvent;
         }
 
@@ -37,15 +41,15 @@ namespace Ducktastic
             _ınputManager.OnFire -= FireEvent;
         }
 
-        void InitializeObjectPool()
+        public void InitializeObjectPool()
         {
-            objectPool = new Queue<GameObject>();
+            Data.objectPool = new Queue<GameObject>();
 
-            for (int i = 0; i < poolSize; i++)
+            for (int i = 0; i < 2; i++)
             {
-                GameObject obj = Instantiate(bullet,poolPos);
+                GameObject obj = Instantiate(Data.bullet, Data.poolPos);
                 obj.SetActive(false);
-                objectPool.Enqueue(obj);
+                Data.objectPool.Enqueue(obj);
             }
         }
 
@@ -53,25 +57,25 @@ namespace Ducktastic
         {
             FireBullet();
         }
-        
-        void FireBullet()
+
+        public void FireBullet()
         {
-            if (objectPool.Count > 0)
+            if (Data.objectPool.Count > 0)
             {
-                GameObject bullet = objectPool.Dequeue();
-                Transform firePosition = firePos[Random.Range(0, firePos.Length)];
+                GameObject bullet = Data.objectPool.Dequeue();
+                Transform firePosition = Data.firePos[Random.Range(0, 1)];
                 bullet.transform.position = firePosition.position;
                 bullet.transform.rotation = firePosition.rotation;
                 bullet.SetActive(true);
-                StartCoroutine(DisableAfterTime(bullet, fireRepeatTime));
+                StartCoroutine(DisableAfterTime(bullet, Data.fireRepeatTime));
             }
         }
-        
-        IEnumerator DisableAfterTime(GameObject obj, float time)
+
+        public IEnumerator DisableAfterTime(GameObject obj, float time)
         {
             yield return new WaitForSeconds(time);
             obj.SetActive(false);
-            objectPool.Enqueue(obj);
+            Data.objectPool.Enqueue(obj);
         }
     }
 }
