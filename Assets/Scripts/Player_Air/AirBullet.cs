@@ -5,17 +5,9 @@ namespace Ducktastic
 {
     public class AirBullet : MonoBehaviour
     {
-        public float speed = 100;
-
-        public GameObject fireEffect;
-
-        public int damage = 20;
-
-        public String targetName;
-
+        public BulletData _data;
+        
         private Rigidbody rb;
-
-        private bool touched = false;
 
         private void Awake()
         {
@@ -24,7 +16,7 @@ namespace Ducktastic
 
         private void FixedUpdate()
         {
-            rb.AddForce(transform.forward * speed);
+            rb.AddForce(transform.forward * _data.speed);
         }
 
         void OnEnable()
@@ -34,16 +26,16 @@ namespace Ducktastic
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Enemy"))
+            if(other.gameObject.CompareTag(_data.targetName)) return;
+            
+            if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag(_data.currentJetName))
             {
-                Instantiate(fireEffect, transform.position, Quaternion.identity);
+                Instantiate(_data.fireEffect, transform.position, Quaternion.identity);
             }
-
-            if (!other.gameObject.CompareTag(targetName)) return;
-
+            
             if (other.gameObject.TryGetComponent(out IHealth health))
             {
-                health.TakeDamage(damage);
+                health.TakeDamage(_data.damage);
             }
         }
     }

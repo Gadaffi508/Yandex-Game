@@ -8,17 +8,6 @@ namespace Ducktastic
 {
     public class AirShootController : MonoBehaviour, IAttack
     {
-        public AttackData Data
-        {
-            get { return data; }
-            set
-            {
-                Data.firePos[0] = firePos[0];
-                Data.firePos[1] = firePos[1];
-                Data.poolPos = poolPos;
-            }
-        }
-        
         public Transform[] firePos;
         
         public Transform poolPos;
@@ -26,6 +15,8 @@ namespace Ducktastic
         public AttackData data;
 
         private PlayerInput _ınputManager;
+        
+        private Queue<GameObject> objectPool;
 
         void Start()
         {
@@ -43,13 +34,13 @@ namespace Ducktastic
 
         public void InitializeObjectPool()
         {
-            Data.objectPool = new Queue<GameObject>();
+            objectPool = new Queue<GameObject>();
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < data.poolSize; i++)
             {
-                GameObject obj = Instantiate(Data.bullet, Data.poolPos);
+                GameObject obj = Instantiate(data.bullet, poolPos);
                 obj.SetActive(false);
-                Data.objectPool.Enqueue(obj);
+                objectPool.Enqueue(obj);
             }
         }
 
@@ -60,14 +51,16 @@ namespace Ducktastic
 
         public void FireBullet()
         {
-            if (Data.objectPool.Count > 0)
+            if (objectPool.Count > 0)
             {
-                GameObject bullet = Data.objectPool.Dequeue();
-                Transform firePosition = Data.firePos[Random.Range(0, 1)];
-                bullet.transform.position = firePosition.position;
-                bullet.transform.rotation = firePosition.rotation;
-                bullet.SetActive(true);
-                StartCoroutine(DisableAfterTime(bullet, Data.fireRepeatTime));
+                for (int i = 0; i < 2; i++)
+                {
+                    GameObject bullet = objectPool.Dequeue();;
+                    bullet.transform.position = firePos[i].position;
+                    bullet.transform.rotation = firePos[i].rotation;
+                    bullet.SetActive(true);
+                    StartCoroutine(DisableAfterTime(bullet, data.fireRepeatTime));
+                }
             }
         }
 
@@ -75,7 +68,7 @@ namespace Ducktastic
         {
             yield return new WaitForSeconds(time);
             obj.SetActive(false);
-            Data.objectPool.Enqueue(obj);
+            objectPool.Enqueue(obj);
         }
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Ducktastic
 {
+    [RequireComponent(typeof(EnemyAttack))]
     public class EnemyFollow : MonoBehaviour
     {
         public Transform target;
@@ -11,7 +12,10 @@ namespace Ducktastic
 
         public float speed;
 
-        public GameObject bullet;
+        private EnemyAttack _attack;
+
+        private void Start() =>
+            _attack = GetComponent<EnemyAttack>();
 
         private void Update()
         {
@@ -19,13 +23,13 @@ namespace Ducktastic
                 transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             else
                 Fire();
-            
+
             transform.LookAt(target);
         }
 
         void Fire()
         {
-            Debug.Log("Fire Enemy");
+            _attack.Attack();
         }
 
         bool Distance()

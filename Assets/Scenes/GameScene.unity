@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &35685645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 35685646}
+  m_Layer: 0
+  m_Name: Bullets
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &35685646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35685645}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2746178040493450635}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &46722202
 GameObject:
   m_ObjectHideFlags: 0
@@ -25845,6 +25876,7 @@ GameObject:
   - component: {fileID: 2291048071185473695}
   - component: {fileID: 2291048071185473694}
   - component: {fileID: 2291048071185473693}
+  - component: {fileID: 2291048071185473696}
   m_Layer: 0
   m_Name: Jett
   m_TagString: Player
@@ -31112,6 +31144,19 @@ MonoBehaviour:
   trailParticle:
   - {fileID: 198897649428024138}
   - {fileID: 198897649060023013}
+--- !u!114 &2291048071185473696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477357396705344034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cab66ac30f16aa45a9ccd1c5af49635, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!205 &2294803560119807345
 LODGroup:
   m_ObjectHideFlags: 0
@@ -31180,7 +31225,7 @@ Transform:
   m_GameObject: {fileID: 3267276645452971825}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 130.2}
+  m_LocalPosition: {x: -85.3, y: 0, z: 218.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -31189,6 +31234,7 @@ Transform:
   - {fileID: 1874372991}
   - {fileID: 944137333}
   - {fileID: 561915931}
+  - {fileID: 35685646}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &3027379421846765429
@@ -31251,6 +31297,7 @@ GameObject:
   - component: {fileID: 3365949419489670428}
   - component: {fileID: 3365949419489670429}
   - component: {fileID: 3365949419489670430}
+  - component: {fileID: 3365949419489670431}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -31307,7 +31354,23 @@ MonoBehaviour:
   target: {fileID: 2291048071185473688}
   enemyDistance: 50
   speed: 50
-  bullet: {fileID: 0}
+--- !u!114 &3365949419489670431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3267276645452971825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e7575ccf35da945b347939bc1d216e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePos:
+  - {fileID: 472696047}
+  - {fileID: 128237630}
+  poolPos: {fileID: 35685646}
+  _data: {fileID: 11400000, guid: 878aef14417e17d4f9d6413b2e731510, type: 2}
 --- !u!1 &3496382299707783535
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,6 @@ namespace Ducktastic
 {
     interface IAttack
     {
-        public AttackData Data { get; set; }
-
         void InitializeObjectPool();
 
         void FireBullet();
